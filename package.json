@@ -4,11 +4,12 @@
   "description": "Back-end RESTful API for Ogloszenianglia.co.uk",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
   "author": "Aurelian Spodarec",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.7.14"
   }
 }
