@@ -1,11 +1,15 @@
 class UserService {
-    constructor(User) {
-        this.User = User;
-        this.listUsers = this.listUsers.bind(this)
+    constructor(UserModel) {
+        this.UserModel = UserModel;
+        // this.listUsers = this.listUsers.bind(this)
     }
 
     listUsers() {
-        return this.User.find({})
+        return this.UserModel;
+    }
+
+    getUserById(userId) {
+        return this.UserModel.find(userId)
     }
 
     _extractFields(user, fields) {

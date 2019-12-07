@@ -1,9 +1,11 @@
-const UserService = require("./UserService")
-
-const { User } = require("../models")
-
-const userService = new UserService(User);
+const UserService = require("./user/UserService")
+const { UserModel } = require("./user/UserModel")
+const fs = require('fs')
+const users = JSON.parse(
+    fs.readFileSync(`./data/users.json`)
+)
 
 module.exports = {
-    userService
+    // userService: new UserService(UserModel)
+    userService: new UserService(users)
 }

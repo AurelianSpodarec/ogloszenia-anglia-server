@@ -1,4 +1,3 @@
-const fs = require('fs')
 const express = require('express')
 const app = express()
 
@@ -6,9 +5,6 @@ app.use(express.json())
 
 const { userService } = require('./services')
 
-const users = JSON.parse(
-    fs.readFileSync(`${__dirname}/data/users.json`)
-)
 
 app.get('/api/v1/users', (req, res) => {
     // res.status(200).json({
@@ -19,6 +15,11 @@ app.get('/api/v1/users', (req, res) => {
     // })
     const users = userService.listUsers()
     res.json(users)
+})
+
+app.get('/api/v1/users/:id', (req, res) => {
+    const user = userService.getUserById(res.param.id)
+    return res.json(user);
 })
 
 module.exports = app
