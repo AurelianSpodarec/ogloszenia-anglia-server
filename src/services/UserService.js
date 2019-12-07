@@ -1,18 +1,20 @@
 class UserService {
     constructor(User) {
         this.User = User;
-        this.getUsers = this.getUsers.bind(this)
+        this.listUsers = this.listUsers.bind(this)
     }
 
-    // getUsers = async (users) => {
-    //     // await this.Userss
-    //     return users;
+    listUsers() {
+        return this.User.find({})
+    }
+
+    _extractFields(user, fields) {
+        return "extract fields";
+    }
+
+    // getUserById = async (userId) => {
+    //     return await this.User.findById(userId)
     // }
-
-    async getUsers(users) {
-        await this.Users
-        return users
-    }
 
     // saveUser = async (user) => {
     //     await user.save();
@@ -23,10 +25,8 @@ class UserService {
     //     return await this.User.findOne({ username, password });
     // }
 
-    // getUserById = async (userId) => {
-    //     return await this.User.findById(userId)
-    // }
+
 
 }
 
-module.exports = UserService
+module.exports = UserService;

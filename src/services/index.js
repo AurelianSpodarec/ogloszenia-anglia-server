@@ -1,5 +1,9 @@
-import UserService from "./UserService";
+const UserService = require("./UserService")
 
-export {
-    UserService
+const { User } = require("../models")
+
+const userService = new UserService(User);
+
+module.exports = {
+    userService
 }
