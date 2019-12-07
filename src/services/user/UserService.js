@@ -4,33 +4,18 @@ class UserService {
         // this.listUsers = this.listUsers.bind(this)
     }
 
-    listUsers() {
-        return this.UserModel;
+    async listUsers() {
+        const users = await this.UserModel.find()
+        return users;
     }
 
     getUserById(userId) {
-        return this.UserModel.find(userId)
+        return this.UserModel.find(user => user.id === userId);
     }
 
     _extractFields(user, fields) {
         return "extract fields";
     }
-
-    // getUserById = async (userId) => {
-    //     return await this.User.findById(userId)
-    // }
-
-    // saveUser = async (user) => {
-    //     await user.save();
-    //     return user;
-    // }
-
-    // getUser = async (username, password) => {
-    //     return await this.User.findOne({ username, password });
-    // }
-
-
-
 }
 
 module.exports = UserService;

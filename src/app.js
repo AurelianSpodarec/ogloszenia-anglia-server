@@ -1,25 +1,10 @@
-const express = require('express')
-const app = express()
+const express = require('express');
 
-app.use(express.json())
-
-const { userService } = require('./services')
+const { userRouter } = require('./routes');
 
 
-app.get('/api/v1/users', (req, res) => {
-    // res.status(200).json({
-    //     status: 'success',
-    //     data: {
-    //         users: userService.listUsers()
-    //     }
-    // })
-    const users = userService.listUsers()
-    res.json(users)
-})
+const app = express();
 
-app.get('/api/v1/users/:id', (req, res) => {
-    const user = userService.getUserById(res.param.id)
-    return res.json(user);
-})
+app.use('/api/v1/users', userRouter);
 
 module.exports = app
