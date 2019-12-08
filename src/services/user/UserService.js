@@ -20,6 +20,10 @@ class UserService {
         })
     }
 
+    getUserByEmail(email) {
+        return this.UserModel.findOne({ email })
+    }
+
     async getUserById(userId) {
         return await this.UserModel.findById(userId);
     }
@@ -28,9 +32,8 @@ class UserService {
         return await this.UserModel.findOne({ username, password })
     }
 
-    async createUser(firstName, lastName) {
-        const user = new this.UserModel({ firstName, lastName })
-        return user.save();
+    async createUser(email, password) {
+        return new this.UserModel({ email, password }).save();
     }
 
     async updateUser(userId, firstName, lastName) {
@@ -41,6 +44,17 @@ class UserService {
         const user = await this.UserModel.findById(userId);
         user.deleted = true;
         return user.save();
+    }
+
+    async registerUser(email, password) {
+        const isUser = await this.getUserByEmail(email);
+
+        if (isUser) {
+            throw new Error("There is already a user with that email");
+        }
+
+        const hash = await bcrypt.hash(password, SLAT_ROUNDS);
+        return this.createUser(email, hash);
     }
 
     _extractFields(user, fields) {

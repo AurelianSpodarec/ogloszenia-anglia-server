@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     username: { type: String, required: true },
+    role: [{ type: String }],
     email: {
         type: String,
         required: [true, 'Please provide your email'],
@@ -34,5 +35,18 @@ const userSchema = new mongoose.Schema({
     disabled: { type: Boolean },
     deleted: { type: Boolean, default: false },
 })
+
+userSchema.methods.authorize = function (roleToCheck) {
+    const roles = ['Admin', 'Mod', 'User', 'Guest'];
+    let user = this;
+
+    for (let role of user.roles) {
+        if (roles.indexOf(role) <= roles.indexOf(roleToCheck)) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 module.exports = mongoose.model("User", userSchema);
