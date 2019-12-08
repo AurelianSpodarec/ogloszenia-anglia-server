@@ -9,8 +9,9 @@ class UserService {
         return users;
     }
 
-    getUserById(userId) {
-        return this.UserModel.find(user => user.id === userId);
+    async getUserById(userId) {
+        const user = await this.UserModel.findById(userId)
+        return user;
     }
 
     _extractFields(user, fields) {

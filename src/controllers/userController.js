@@ -7,6 +7,11 @@ router.get('/api/v1/users', async (req, res) => {
     res.json(users)
 })
 
+router.get('/api/v1/user/:id', async (req, res) => {
+    const user = await userService.getUserById(req.params.id)
+    res.json(user)
+})
+
 module.exports = router;
 
 
