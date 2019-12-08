@@ -1,17 +1,21 @@
 class UserService {
     constructor(UserModel) {
         this.UserModel = UserModel;
-        // this.listUsers = this.listUsers.bind(this)
+        this.listUsers = this.listUsers.bind(this);
+        this.getUserById = this.getUserById.bind(this);
+        this.getUser = this.getUser.bind(this);
     }
 
     async listUsers() {
-        const users = await this.UserModel.find()
-        return users;
+        return await this.UserModel.find()
     }
 
     async getUserById(userId) {
-        const user = await this.UserModel.findById(userId)
-        return user;
+        return await this.UserModel.findById(userId);
+    }
+
+    async getUser(username, password) {
+        return await this.UserModel.findOne({ username, password })
     }
 
     _extractFields(user, fields) {
