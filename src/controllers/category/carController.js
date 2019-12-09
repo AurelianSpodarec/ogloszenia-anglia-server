@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router();
-const { carServices } = require('./../../services/category')
+const { carService } = require('./../../services/category')
 
 router.get('/api/v1/cars', async (req, res) => {
-    const cars = carSerices.listCars()
+    const cars = await carService.listCars()
     res.json(cars)
 })
 

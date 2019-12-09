@@ -1,6 +1,10 @@
 const CarModel = require('./car/CarModel');
-const CarService = require('./car/CarService')
+const CarService = require('./car/CarService');
+
+const HomeModel = require('./home/HomeModel');
+const HomeService = require('./home/HomeService');
 
 module.exports = {
-    carModel = new CarService(CarModel)
+    carService: new CarService(CarModel),
+    homeService: new HomeService(HomeModel)
 }

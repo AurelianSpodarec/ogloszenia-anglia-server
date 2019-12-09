@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 
-const { userController } = require('./controllers')
+const { userController, homeController, carController } = require('./controllers')
 
 
 app.disable('x-powered-by');
 
 
-app.use('/', userController);
-
+app.use('/', userController, homeController, carController);
+// app.use('/', userController);
 
 app.use((error, req, res, next) => {
     console.log(error);

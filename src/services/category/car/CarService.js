@@ -4,9 +4,9 @@ class CarService {
     }
 
     listCars() {
-        return []
+        return [{ "car": 'caa' }]
     }
 
 }
 
-module.exports = CarService
+module.exports = CarService;
