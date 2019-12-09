@@ -3,6 +3,10 @@ const app = express();
 
 const { userController, homeController, carController } = require('./controllers')
 
+const cors = require('cors');
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
 app.disable('x-powered-by');
 

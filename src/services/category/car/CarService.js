@@ -7,6 +7,10 @@ class CarService {
         return [{ "car": 'caa' }]
     }
 
+    async getCarById(carId) {
+        return await this.CarModel.findById(carId);
+    }
+
 }
 
 module.exports = CarService;
