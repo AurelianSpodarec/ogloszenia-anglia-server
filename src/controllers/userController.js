@@ -2,15 +2,18 @@ const express = require('express')
 const router = express.Router();
 const { userService } = require('./../services')
 const jwt = require('jsonwebtoken');
+const catchExceptions = require('./../errors/CatchException');
 
 
-router.get('/api/v1/users', async (req, res) => {
-    const users = await userService.listUsers();
-    res.json(users)
-})
+router.get('/api/v1/users',
+    catchExceptions(async (req, res) => {
+        const users = await userService.listUsers();
+        res.json(users)
+    })
+);
 
-router.post('/api/v1/user', async (req, res) => {
-    try {
+router.post('/api/v1/user',
+    catchExceptions(async (req, res) => {
         const { firstName } = req.body;
         const user = await userService.createUser(firstName);
         res.status(201).json({
@@ -19,20 +22,15 @@ router.post('/api/v1/user', async (req, res) => {
                 user
             }
         })
+    })
+);
 
-    } catch (err) {
-
-        res.status(400).json({
-            status: "fail",
-            message: err
-        })
-    }
-})
-
-router.get('/api/v1/user/:id', async (req, res) => {
-    const user = await userService.getUserById(req.params.id)
-    res.json(user)
-})
+router.get('/api/v1/user/:id',
+    catchExceptions(async (req, res) => {
+        const user = await userService.getUserById(req.params.id)
+        res.json(user)
+    })
+);
 
 // router.post('/api/v1/user/signup', async (req, res) => {
 //     const newUser = await userService.createUser({
@@ -56,52 +54,3 @@ router.get('/api/v1/user/:id', async (req, res) => {
 // })
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-// const router = require("express").Router();
-// const { userService } = require("./services");
-
-// router.get("/api/v1/users", (req, res) => {
-//     const userList = userService.getUsers();
-
-//     res.json(userList);
-// })
-
-
-// const { userService } = require('./../services')
-// // module.exports = router;
-
-// const listUsers = async (req, res) => {
-//     const users = await userService.listUsers()
-//     res.json(users)
-// }
-
-// module.exports = {
-//     listUsers
-// }
-
-// exports.getAllTours = catchAsync(async (req, res, next) => {
-//     const features = new APIFeatures(Tour.find(), req.query)
-//       .filter()
-//       .sort()
-//       .limitFields()
-//       .paginate();
-//     const tours = await features.query;
-
-//     // SEND RESPONSE
-//     res.status(200).json({
-//       status: 'success',
-//       results: tours.length,
-//       data: {
-//         tours
-//       }
-//     });
-//   });

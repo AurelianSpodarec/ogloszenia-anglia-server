@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { carService } = require('./../../services/category')
+const { carService } = require('./../../services')
 
 router.get('/api/v1/cars', async (req, res) => {
     const cars = await carService.listCars()
@@ -8,7 +8,7 @@ router.get('/api/v1/cars', async (req, res) => {
 })
 
 router.put('/api/v1/cars', async (req, res) => {
-    // Create
+    const createCar = carService.createCar(req.params.name)
 })
 
 router.get('/api/v1/car/:id', async (req, res) => {
