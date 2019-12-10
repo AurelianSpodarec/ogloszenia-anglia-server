@@ -10,16 +10,14 @@ router.get('/api/v1/users', async (req, res) => {
 })
 
 router.post('/api/v1/user', async (req, res) => {
-    // console.log("mmmmmmmmmmmmmmmmmmmmmmmmmm")
     try {
-        // const { firstName } = req.body;
-        // const user = await userService.createUser(firstName);
-        // console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", await req.body.firstName)
-        // const a = req.body.firstName
-        // res.json(req.params.bo)
+        const { firstName } = req.body;
+        const user = await userService.createUser(firstName);
         res.status(201).json({
             status: 'success',
-            data: req.body.firstName
+            data: {
+                user
+            }
         })
 
     } catch (err) {

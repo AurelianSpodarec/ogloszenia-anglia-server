@@ -39,9 +39,9 @@ class UserService {
     //     return await newUser.save();
     //     // return newUser;
     // }
-    async createUser(firstName) {
+    createUser(firstName) {
         const user = new this.UserModel({ firstName });
-        return await user.save();
+        return user.save();
     }
 
     async updateUser(userId, firstName, lastName) {
