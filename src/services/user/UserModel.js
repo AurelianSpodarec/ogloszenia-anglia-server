@@ -1,10 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     username: { type: String, required: true },
-    role: [{ type: String }],
+    role: {
+        type: String,
+        enum: ['user', 'subscriber', 'moderator', 'staff', 'admin'],
+        default: 'user'
+    },
     email: {
         type: String,
         required: [true, 'Please provide your email'],
@@ -26,12 +30,16 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    posts: {
-        type: Array,
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    active: {
+        type: Boolean,
+        default: true,
+        select: false
     },
-    location: {
-        type: String,
-    },
+    posts: Array,
+    location: String,
     disabled: { type: Boolean },
     deleted: { type: Boolean, default: false },
 })
@@ -48,5 +56,18 @@ userSchema.methods.authorize = function (roleToCheck) {
 
     return false;
 }
+
+// userSchema.methods.signup = function () {
+//     const token = jwt.sign({ id: newUser._id }, process, env.JWT_SECRET, {
+//         expiresIn: process.env.JWT_EXPIRES_IN
+//     });
+//     res.status(201).json({
+//         status: 'success',
+//         token,
+//         data: {
+//             user: newUser
+//         }
+//     })
+// }
 
 module.exports = mongoose.model("User", userSchema);
