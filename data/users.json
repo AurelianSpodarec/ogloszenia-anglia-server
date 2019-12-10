@@ -1,20 +1,26 @@
 [
     {
-        "id": 1,
         "firstName": "Aurelian",
         "lastName": "Spodarec",
-        "email": "dragon@gmail.com"
+        "password": "asdasdasd",
+        "passwordConfirm": "asdasdasd",
+        "email": "dragon@gmail.com",
+        "deleted": false
     },
     {
-        "id": 2,
         "firstName": "Joe",
         "lastName": "Smith",
-        "email": "keroo@gmail.com"
+        "password": "asdasdasd",
+        "passwordConfirm": "asdasdasd",
+        "email": "keroo@gmail.com",
+        "deleted": false
     },
     {
-        "id": 3,
         "firstName": "Kabuga",
         "lastName": "Elok",
-        "email": "elok22@gmail.com"
+        "password": "asdasdasd",
+        "passwordConfirm": "asdasdasd",
+        "email": "elok22@gmail.com",
+        "deleted": false
     }
 ]

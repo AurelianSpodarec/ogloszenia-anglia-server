@@ -7,6 +7,10 @@ router.get('/api/v1/cars', async (req, res) => {
     res.json(cars)
 })
 
+router.put('/api/v1/cars', async (req, res) => {
+    // Create
+})
+
 router.get('/api/v1/car/:id', async (req, res) => {
     const car = await carService.getCarById(req.params.id)
     res.json(car)

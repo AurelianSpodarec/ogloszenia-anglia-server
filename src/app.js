@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
 const { userController, homeController, carController } = require('./controllers')
 
 const cors = require('cors');

@@ -32,8 +32,16 @@ class UserService {
         return await this.UserModel.findOne({ username, password })
     }
 
-    async createUser(email, password) {
-        return new this.UserModel({ email, password }).save();
+    // async createUser(user) {
+    //     console.log("MOOOOOOOOOMMMMOOOOOOOOOOOOOOOOOOOOOOOOOOOOO", user)
+    //     const newUser = new this.UserModel(user);
+    //     // return await newUser.save();
+    //     return await newUser.save();
+    //     // return newUser;
+    // }
+    async createUser(firstName) {
+        const user = new this.UserModel({ firstName });
+        return await user.save();
     }
 
     async updateUser(userId, firstName, lastName) {
