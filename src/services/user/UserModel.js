@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         // required: true 
     },
-    username: {
-        type: String,
-        // required: true 
-    },
     role: {
         type: String,
         enum: ['user', 'subscriber', 'moderator', 'staff', 'admin'],
@@ -21,18 +17,18 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         // required: [true, 'Please provide your email'],
-        // unique: true,
+        unique: true,
         lowercase: true
     },
     emailVerified: {
         type: Boolean,
         default: false
     },
-    // password: {
-    //     type: String,
-    //     // required: [true, "Please provide password"],
-    //     minlength: 8
-    // },
+    password: {
+        type: String,
+        // required: [true, "Please provide password"],
+        minlength: 8
+    },
     // passwordConfirm: {
     //     type: String,
     //     // required: [true, 'Please confirm your password']

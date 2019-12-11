@@ -1,3 +1,8 @@
+const bcrypt = require("bcryptjs");
+const StatusError = require("./../../errors/StatusError");
+
+const SALT_ROUNDS = 12;
+
 class UserService {
     constructor(UserModel) {
         this.UserModel = UserModel;
@@ -32,8 +37,8 @@ class UserService {
         return await this.UserModel.findOne({ username, password })
     }
 
-    createUser(firstName) {
-        const user = new this.UserModel({ firstName });
+    createUser(firstName, lastName, email, password) {
+        const user = new this.UserModel({ firstName, lastName, email, password });
         return user.save();
     }
 
@@ -47,15 +52,31 @@ class UserService {
         return user.save();
     }
 
-    async registerUser(email, password) {
+    async login(email, password) {
+        const maybeUser = await this.getUserByEmail(email);
+
+        if (!maybeUser) {
+            throw new StatusError("Invalid username or password", 401);
+        }
+
+        const passwordMatch = await bcrypt.compare(password, maybeUser.password);
+
+        if (!passwordMatch) {
+            throw new StatusError("Invalid username or password", 401);
+        }
+
+        return maybeUser;
+    }
+
+    async registerUser(firstName, lastName, email, password) {
         const isUser = await this.getUserByEmail(email);
 
         if (isUser) {
             throw new Error("There is already a user with that email");
         }
 
-        const hash = await bcrypt.hash(password, SLAT_ROUNDS);
-        return this.createUser(email, hash);
+        const passwordEncrypted = await bcrypt.hash(password, 12);
+        return this.createUser(firstName, lastName, email, passwordEncrypted);
     }
 
     _extractFields(user, fields) {

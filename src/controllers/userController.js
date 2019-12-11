@@ -14,8 +14,8 @@ router.get('/api/v1/users',
 
 router.post('/api/v1/user',
     catchExceptions(async (req, res) => {
-        const { firstName } = req.body;
-        const user = await userService.createUser(firstName);
+        const { firstName, lastName, email, password } = req.body;
+        const user = await userService.registerUser(firstName, lastName, email, password);
         res.status(201).json({
             status: 'success',
             data: {
