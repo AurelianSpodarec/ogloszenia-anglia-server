@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        // required: true
+        required: true
     },
     lastName: {
         type: String,
-        // required: true 
+        required: true
     },
     role: {
         type: String,
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        // required: [true, 'Please provide your email'],
+        required: [true, 'Please provide your email'],
         unique: true,
         lowercase: true
     },
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        // required: [true, "Please provide password"],
+        required: [true, "Please provide password"],
         minlength: 8
     },
     // passwordConfirm: {
@@ -52,8 +52,8 @@ const userSchema = new mongoose.Schema({
     deleted: { type: Boolean, default: false },
 })
 
-userSchema.methods.authorize = function (roleToCheck) {
-    const roles = ['Admin', 'Mod', 'User', 'Guest'];
+userSchema.methods.hasPermission = function (roleToCheck) {
+    const roles = ['Super Admin', 'Admin', 'Mod', 'User', 'Guest'];
     let user = this;
 
     for (let role of user.roles) {
