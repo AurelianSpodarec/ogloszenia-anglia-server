@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -27,7 +28,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Please provide password"],
-        minlength: 8
+        minlength: 8,
+        select: false
     },
     // passwordConfirm: {
     //     type: String,
@@ -65,7 +67,9 @@ userSchema.methods.hasPermission = function (roleToCheck) {
     return false;
 }
 
-userSchema.methods.correctPassword = async function () { }
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
 
 userSchema.methods.createPasswordResetToken = function () {
 

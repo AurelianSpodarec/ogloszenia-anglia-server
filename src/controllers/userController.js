@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const catchExceptions = require('./../errors/CatchException');
 const StatusError = require('./..//errors/StatusError');
 
+
 router.get('/api/v1/users',
     catchExceptions(async (req, res) => {
         const users = await userService.listUsers();
@@ -12,16 +13,29 @@ router.get('/api/v1/users',
     })
 );
 
+const signToken = id => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    });
+}
+
 router.post('/api/v1/user/login',
-    catchExceptions(async (req, res) => {
+    catchExceptions(async (req, res, next) => {
 
         const { email, password } = req.body;
 
         if (!email || !password) {
-            next(new StatusError("Please provide email and password", 400))
+            return next(new StatusError("Please provide email and password", 400));
         }
 
-        const token = '';
+        const user = await userService.getUserByEmail(email).select('+password');
+
+        if (!user || !(await user.correctPassword(password, user.password))) {
+            return next(new StatusError('Incorrect email or password', 401));
+        }
+
+        const token = signToken(user._id);
+
         res.status(201).json({
             status: 'success',
             token
@@ -29,12 +43,14 @@ router.post('/api/v1/user/login',
     })
 );
 
-router.post('/api/v1/user',
-    catchExceptions(async (req, res) => {
+router.post('/api/v1/user/signup',
+    catchExceptions(async (req, res, next) => {
         const { firstName, lastName, email, password } = req.body;
         const user = await userService.registerUser(firstName, lastName, email, password);
+        const token = signToken(user._id)
         res.status(201).json({
             status: 'success',
+            token,
             data: {
                 user
             }

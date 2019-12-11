@@ -1,6 +1,6 @@
-const catchExceptions = func => {
+const catchExceptions = fn => {
     return (req, res, next) => {
-        Promise.resolve(func(req, res)).catch(next);
+        fn(req, res, next).catch(next);
     };
 };
 
