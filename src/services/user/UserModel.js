@@ -71,6 +71,14 @@ userSchema.methods.correctPassword = async function (candidatePassword, userPass
     return await bcrypt.compare(candidatePassword, userPassword);
 }
 
+userSchema.method.changePasswordAfter = function (JWTimestamp) {
+    if (this.passwordChangedAt) {
+        console.log(this.passwordChangedAt, JWTimestamp)
+    }
+
+    return false;
+}
+
 userSchema.methods.createPasswordResetToken = function () {
 
 }

@@ -1,6 +1,6 @@
 // User
-const UserService = require("./user/UserService")
-const UserModel = require("./user/UserModel")
+const UserService = require("./user/UserService");
+const UserModel = require("./user/UserModel");
 
 // Categories
 const CarModel = require('./category/car/CarModel');

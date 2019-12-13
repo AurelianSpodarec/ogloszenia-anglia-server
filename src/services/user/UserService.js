@@ -60,7 +60,7 @@ class UserService {
         }
 
         const passwordMatch = await bcrypt.compare(password, maybeUser.password);
-
+        const token = ""
         if (!passwordMatch) {
             throw new StatusError("Invalid username or password", 401);
         }
@@ -72,7 +72,7 @@ class UserService {
         const isUser = await this.getUserByEmail(email);
 
         if (isUser) {
-            throw new Error("There is already a user with that email");
+            throw new StatusError("There is already a user with that email", 400);
         }
 
         const passwordEncrypted = await bcrypt.hash(password, 12);
