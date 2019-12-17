@@ -46,10 +46,15 @@ class UserService {
 
     }
 
+    // async deleteUser(userId) {
+    //     const user = await this.UserModel.findById(userId);
+    //     user.deleted = true;
+    //     return user.save();
+    // }
+
     async deleteUser(userId) {
-        const user = await this.UserModel.findById(userId);
-        user.deleted = true;
-        return user.save();
+        const user = await this.UserModel.deleteOne(userId);
+        return;
     }
 
     async login(email, password) {

@@ -4,7 +4,7 @@
   "description": "Back-end RESTful API for Ogloszenianglia.co.uk",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon server.js",
+    "start": "nodemon server.js",
     "restart:prod": "NODE_ENV=production nodemon server.js"
   },
   "author": "Aurelian Spodarec",

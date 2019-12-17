@@ -30,12 +30,22 @@ const protectedRoute = catchExceptions(async (req, res, next) => {
     if (!freshUser) {
         return next(new StatusError('The user belonging to this token does not exist.', 401))
     }
-
+    req.user = freshUser;
     next();
 })
 
+const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(new StatusError("You don't have premission to perform this action", 403))
+        }
+        next();
+    }
+}
+
 router.get('/api/v1/users',
     protectedRoute,
+    restrictTo('admin', 'staff'),
     catchExceptions(async (req, res) => {
         const users = await userService.listUsers();
         res.json(users)
@@ -45,6 +55,14 @@ router.get('/api/v1/users',
 router.get('/api/v1/user/:id',
     catchExceptions(async (req, res) => {
         const user = await userService.getUserById(req.params.id)
+        res.json(user)
+    })
+);
+
+router.delete('/api/v1/user/:id',
+    protectedRoute,
+    catchExceptions(async (req, res) => {
+        const user = await userService.deleteUser(req.params.id)
         res.json(user)
     })
 );
