@@ -19,7 +19,6 @@ const sendEmail = async options => {
         // html: option.text
     }
 
-    // console.log("SDDFS")
     await transporter.sendMail(mailOptions)
 }
 
