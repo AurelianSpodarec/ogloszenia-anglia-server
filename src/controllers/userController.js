@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const catchExceptions = require('./../errors/CatchException');
 const StatusError = require('./..//errors/StatusError');
 const { promisify } = require('util');
+const sendEmail = require('./email.js');
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -45,17 +46,44 @@ const restrictTo = (...roles) => {
 
 
 
-router.post('/api/v1/user/forgotPassword',
-    catchExceptions(async (req, res, next) => {
-        const user = await userService.getUserByEmail(req.body.email)
-        if (!user) return next(new StatusError("There is no user with this email address", 404))
-        const resetToken = user.createPasswordResetToken();
-        await user.save({ validateBeforeSave: false });
-    })
-)
+router.post('/api/v1/user/forgotPassword', catchExceptions(async (req, res, next) => {
+    const user = await userService.getUserByEmail(req.body.email)
+    if (!user) return next(new StatusError("There is no user with this email address", 404))
+
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    const resetURL = `${req.protocol}://${req.get(
+        'host'
+    )}/api/v1/user/resetPassword/${resetToken}`;
+    console.log(resetURL)
+
+    const message = `Forgot your password? Submit a PATCH reset with your new password and
+    passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this
+    email!`;
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'Your password reset token(expires in 10minutes)',
+            message
+        });
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Token sent to email'
+        })
+    } catch (err) {
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        await user.save({ validateBeforeSave: false })
+
+        return next(new StatusError('There was an error sending the email try again later', 500))
+    }
+}));
 
 
-// router.post('/resetPassword',
+// router.patch('/api/v1/user/resetPassword/:token',
 //     catchExceptions(async (req, res) => {
 
 //     })

@@ -1,12 +1,26 @@
 const nodemailer = require('nodemailer');
 
-const sendEmail = options => {
+const sendEmail = async options => {
+
     const transporter = nodemailer.createTransport({
-        service: 'Gmail',
+        host: process.env.EMAIL_HOST,
+        part: process.env.EMAIL_PORT,
         auth: {
             user: process.env.EMAIL_USERNAME,
             password: process.env.EMAIL_PASSWORD
         }
-        // Activate in gmail 'less secure app' option
-    })
+    });
+
+    const mailOptions = {
+        from: 'Ogloszenia Anglia <hello@ogloszenianglia.co.uk',
+        to: options.email,
+        subject: options.subject,
+        text: options.message
+        // html: option.text
+    }
+
+    // console.log("SDDFS")
+    await transporter.sendMail(mailOptions)
 }
+
+module.exports = sendEmail;
