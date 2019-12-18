@@ -43,6 +43,26 @@ const restrictTo = (...roles) => {
     }
 }
 
+
+
+router.post('/api/v1/user/forgotPassword',
+    catchExceptions(async (req, res, next) => {
+        const user = await userService.getUserByEmail(req.body.email)
+        if (!user) return next(new StatusError("There is no user with this email address", 404))
+        const resetToken = user.createPasswordResetToken();
+        await user.save({ validateBeforeSave: false });
+    })
+)
+
+
+// router.post('/resetPassword',
+//     catchExceptions(async (req, res) => {
+
+//     })
+// )
+
+
+
 router.get('/api/v1/users',
     protectedRoute,
     restrictTo('admin', 'staff'),
