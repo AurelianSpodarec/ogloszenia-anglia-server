@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const catchExceptions = require('./../errors/CatchException');
 const StatusError = require('./..//errors/StatusError');
 const { promisify } = require('util');
+const crypto = require('crypto')
 const sendEmail = require('./../util/email');
 
 const signToken = id => {
@@ -83,11 +84,28 @@ router.post('/api/v1/user/forgotPassword', catchExceptions(async (req, res, next
 }));
 
 
-// router.patch('/api/v1/user/resetPassword/:token',
-//     catchExceptions(async (req, res) => {
+router.patch('/api/v1/user/resetPassword/:token',
+    catchExceptions(async (req, res, next) => {
+        const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
-//     })
-// )
+        const user = await userService.getUserByResetToken(hashedToken);
+
+        if (!user) return next(new StatusError("TOken is invalid or expired", 400))
+
+        user.password = req.body.password;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+
+        await user.save();
+
+        const token = signToken(user._id)
+        res.status(200).json({
+            status: 'success',
+            token
+        })
+
+    })
+)
 
 
 

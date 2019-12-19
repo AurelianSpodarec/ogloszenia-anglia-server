@@ -25,6 +25,14 @@ class UserService {
         })
     }
 
+    async getUserByResetToken(token) {
+        return await this.UserModel.findOne({
+            passwordResetToken: token,
+            passwordResetExpires: { $gt: Date.now() }
+
+        });
+    }
+
     getUserByEmail(email) {
         return this.UserModel.findOne({ email })
     }
