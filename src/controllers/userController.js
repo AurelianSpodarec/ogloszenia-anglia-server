@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const catchExceptions = require('./../errors/CatchException');
 const StatusError = require('./..//errors/StatusError');
 const { promisify } = require('util');
-const sendEmail = require('./email.js');
+const sendEmail = require('./../util/email');
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
