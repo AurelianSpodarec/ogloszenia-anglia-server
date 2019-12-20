@@ -8,6 +8,18 @@ const { promisify } = require('util');
 const crypto = require('crypto')
 const sendEmail = require('./../util/email');
 
+const User = require('./../services/user/UserModel')
+
+
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+        if (allowedFields.includes(el)) newObj[el] = obj[el];
+    });
+    return newObj;
+};
+
+
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN
@@ -57,15 +69,45 @@ const createSendToken = (user, statusCode, res) => {
     });
 }
 
+
+
+router.patch('/api/v1/user/updateMe',
+    protectedRoute,
+    catchExceptions(async (req, res, next) => {
+        if (req.body.password) {
+            return next(new StatusError("This route is not for password updates. Please use /updateMyPassword", 400))
+        }
+
+        const filteredBody = filterObj(req.body, 'firstName', 'email');
+        const updatedUser = await userService.findByIdAndUpdate(req.user.id, filteredBody, {
+            new: true,
+            runValidators: true
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: updatedUser
+            }
+        });
+    })
+);
+
+
+
+
+
+
+
+
 router.patch('/api/v1/user/updateMyPassword',
     protectedRoute,
     catchExceptions(async (req, res, next) => {
         // const user = await userService.getUserById(req.user.id);
         const user = await userService.getUserByIdwithPassword(req.user.id);
         // const user = await user.findById(req.user.id).select('+password')
-
         if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-            return next(new AppError('Your current password is wrong.', 401))
+            return next(new StatusError('Your current password is wrong.', 401))
         }
 
         user.password = req.body.password;

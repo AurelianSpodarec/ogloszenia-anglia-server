@@ -33,6 +33,10 @@ class UserService {
         });
     }
 
+    async findByIdAndUpdate(a, b) {
+        return this.UserModel.findByIdAndUpdate(a, b);
+    }
+
     getUserByEmail(email) {
         return this.UserModel.findOne({ email })
     }
