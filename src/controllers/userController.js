@@ -45,7 +45,36 @@ const restrictTo = (...roles) => {
     }
 }
 
+const createSendToken = (user, statusCode, res) => {
+    const token = signToken(user._id);
 
+    res.status(statusCode).json({
+        status: 'success',
+        token,
+        data: {
+            user
+        }
+    });
+}
+
+router.patch('/api/v1/user/updateMyPassword',
+    protectedRoute,
+    catchExceptions(async (req, res, next) => {
+        // const user = await userService.getUserById(req.user.id);
+        const user = await userService.getUserByIdwithPassword(req.user.id);
+        // const user = await user.findById(req.user.id).select('+password')
+
+        if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+            return next(new AppError('Your current password is wrong.', 401))
+        }
+
+        user.password = req.body.password;
+        user.passwordConfirm = req.body.passwordConfirm;
+
+        await user.save();
+        createSendToken(user, 200, res)
+    })
+);
 
 router.post('/api/v1/user/forgotPassword', catchExceptions(async (req, res, next) => {
     const user = await userService.getUserByEmail(req.body.email)
@@ -84,31 +113,6 @@ router.post('/api/v1/user/forgotPassword', catchExceptions(async (req, res, next
 }));
 
 
-router.patch('/api/v1/user/resetPassword/:token',
-    catchExceptions(async (req, res, next) => {
-        const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-
-        const user = await userService.getUserByResetToken(hashedToken);
-
-        if (!user) return next(new StatusError("TOken is invalid or expired", 400))
-
-        user.password = req.body.password;
-        user.passwordResetToken = undefined;
-        user.passwordResetExpires = undefined;
-
-        await user.save();
-
-        const token = signToken(user._id)
-        res.status(200).json({
-            status: 'success',
-            token
-        })
-
-    })
-)
-
-
-
 router.get('/api/v1/users',
     protectedRoute,
     restrictTo('admin', 'staff'),
@@ -133,6 +137,11 @@ router.delete('/api/v1/user/:id',
     })
 );
 
+
+
+
+
+
 router.post('/api/v1/user/login',
     catchExceptions(async (req, res, next) => {
 
@@ -147,13 +156,7 @@ router.post('/api/v1/user/login',
         if (!user || !(await user.correctPassword(password, user.password))) {
             return next(new StatusError('Incorrect email or password', 401));
         }
-
-        const token = signToken(user._id);
-
-        res.status(201).json({
-            status: 'success',
-            token
-        })
+        createSendToken(user, 201, res);
     })
 );
 
@@ -161,15 +164,30 @@ router.post('/api/v1/user/signup',
     catchExceptions(async (req, res, next) => {
         const { firstName, lastName, email, password } = req.body;
         const user = await userService.registerUser(firstName, lastName, email, password);
-        const token = signToken(user._id)
-        res.status(201).json({
-            status: 'success',
-            token,
-            data: {
-                user
-            }
-        })
+        createSendToken(user, 201, res);
     })
 );
+
+
+router.patch('/api/v1/user/resetPassword/:token',
+    catchExceptions(async (req, res, next) => {
+        const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+        const user = await userService.getUserByResetToken(hashedToken);
+
+        if (!user) return next(new StatusError("TOken is invalid or expired", 400))
+
+        user.password = req.body.password;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+
+        await user.save();
+        createSendToken(user, 200, res)
+
+    })
+)
+
+
+
 
 module.exports = router;

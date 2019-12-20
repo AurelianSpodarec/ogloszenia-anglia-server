@@ -38,7 +38,12 @@ class UserService {
     }
 
     async getUserById(userId) {
-        return await this.UserModel.findById(userId);
+        return await this.UserModel.findById(userId)
+    }
+
+    // TODO: Refactor this HACK!
+    async getUserByIdwithPassword(userId) {
+        return await this.UserModel.findById(userId).select('+password')
     }
 
     async getUser(username, password) {
