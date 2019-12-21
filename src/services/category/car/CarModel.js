@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 
 const CarSchema = new mongoose.Schema({
     carId: String,
-    userId: String,
-
+    userId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
     createdAt: {
         type: Date,
         default: Date.now()
@@ -30,5 +32,10 @@ const CarSchema = new mongoose.Schema({
     coverPicture: String,
     media: [{ id: Number, image: String }],
 })
+
+// CarSchema.pre('save', async function (next) {
+//     const users = this.userId;
+//     next()
+// })
 
 module.exports = mongoose.model("Car", CarSchema);

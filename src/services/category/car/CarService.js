@@ -9,11 +9,20 @@ class CarService {
     }
 
     async getCarById(carId) {
-        return await this.CarModel.findById(carId);
+        const car = await this.CarModel.findById(carId).populate({
+            path: "userId",
+            select: "-__v -passwordChangedAt -deleted -createdAt -emailVerified",
+        });
+
+        if (!car) {
+            return next(new StatusError("No car found with this ID", 404))
+        }
+
+        return car;
     }
 
-    async createCar(title) {
-        const car = await new this.CarModel({ title });
+    async createCar(obj) {
+        const car = await new this.CarModel(obj);
         return car.save();
     }
 

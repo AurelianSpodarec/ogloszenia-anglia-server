@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const { carService } = require('./../../services')
 
+const StatusError = require('./../../errors/StatusError');
 const catchExceptions = require('./../../errors/CatchException');
 
 
@@ -16,7 +17,7 @@ router.get('/api/v1/cars', async (req, res) => {
 
 router.post('/api/v1/car',
     catchExceptions(async (req, res) => {
-        const car = await carService.createCar(req.body.title)
+        const car = await carService.createCar(req.body)
 
         res.status(200).json({
             status: 'success',
@@ -30,9 +31,17 @@ router.post('/api/v1/car',
     })
 );
 
-router.get('/api/v1/car/:id', async (req, res) => {
-    const car = await carService.getCarById(req.params.id)
-    res.json(car)
-})
+router.get('/api/v1/car/:id',
+    catchExceptions(async (req, res, next) => {
+        const car = await carService.getCarById(req.params.id)
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                car
+            }
+        })
+    })
+);
 
 module.exports = router;

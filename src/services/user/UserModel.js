@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         select: false
     },
+    mobilePhoneNumber: {
+        type: Number,
+    },
     // passwordConfirm: {
     //     type: String,
     //     // required: [true, 'Please confirm your password']
