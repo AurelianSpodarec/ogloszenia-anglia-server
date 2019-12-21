@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 
 const CarSchema = new mongoose.Schema({
-    name: String,
-    userId: Number,
-    createdAt: Number,
+    carId: String,
+    userId: String,
+
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
+    // name: String, What is this, can't remember : p
 
     title: String,
     description: String,
@@ -26,4 +31,4 @@ const CarSchema = new mongoose.Schema({
     media: [{ id: Number, image: String }],
 })
 
-module.exports = mongoose.model("CarSchema", CarSchema);
+module.exports = mongoose.model("Car", CarSchema);

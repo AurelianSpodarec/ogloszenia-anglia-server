@@ -1,18 +1,20 @@
 class CarService {
     constructor(CarModel) {
-        this.CarModel = this.CarModel;
+        this.CarModel = CarModel;
     }
 
     listCars() {
-        return [{ "car": 'caa' }]
+        const cars = this.CarModel.find({})
+        return cars;
     }
 
     async getCarById(carId) {
         return await this.CarModel.findById(carId);
     }
 
-    createCar(name, car, url) {
-        return this.CarModel({ name, car, url }).save();
+    async createCar(title) {
+        const car = await new this.CarModel({ title });
+        return car.save();
     }
 
 }
