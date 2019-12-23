@@ -8,8 +8,6 @@ const { promisify } = require('util');
 const crypto = require('crypto')
 const sendEmail = require('./../util/email');
 
-const User = require('./../services/user/UserModel')
-
 
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
@@ -20,11 +18,7 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 
-const signToken = id => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN
-    });
-}
+
 
 const protectedRoute = catchExceptions(async (req, res, next) => {
 
@@ -57,17 +51,25 @@ const restrictTo = (...roles) => {
     }
 }
 
+const signToken = id => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    });
+}
+
 const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id);
-
     const cookieOptions = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        ),
         httpOnly: true
-    }
-
+    };
     if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookie('jwt', token, cookieOptions)
 
+    res.cookie('jwt', token, cookieOptions);
+
+    // Remove password from output
     user.password = undefined;
 
     res.status(statusCode).json({
@@ -77,7 +79,7 @@ const createSendToken = (user, statusCode, res) => {
             user
         }
     });
-}
+};
 
 
 
@@ -96,7 +98,7 @@ router.patch('/api/v1/user/updateMe',
 
         res.status(200).json({
             status: 'success',
-            data: {
+            body: {
                 user: updatedUser
             }
         });
@@ -204,11 +206,11 @@ router.post('/api/v1/user/login',
         }
 
         const user = await userService.getUserByEmail(email).select('+password');
-
-        if (!user || !(await user.correctPassword(password, user.password))) {
+        console.log(user)
+        if (!user || !user.correctPassword(password, user.password)) {
             return next(new StatusError('Incorrect email or password', 401));
         }
-        createSendToken(user, 201, res);
+        createSendToken(user, 200, res);
     })
 );
 
@@ -216,7 +218,7 @@ router.post('/api/v1/user/signup',
     catchExceptions(async (req, res, next) => {
         const { firstName, lastName, email, password } = req.body;
         const user = await userService.registerUser(firstName, lastName, email, password);
-        createSendToken(user, 201, res);
+        createSendToken(user, 200, res);
     })
 );
 
