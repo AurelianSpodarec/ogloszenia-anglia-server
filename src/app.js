@@ -15,7 +15,8 @@ app.use(helmet())
 //TODO: Delete this and add an ENV or PROD code
 const cors = require('cors');
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+    credentials: true
 }));
 
 app.disable('x-powered-by');
