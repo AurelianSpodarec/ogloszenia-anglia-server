@@ -29,7 +29,7 @@ const CarSchema = new mongoose.Schema({
     driveStrain: Array,
     seats: Number,
 
-    coverPicture: String,
+    coverImage: String,
     media: [{ id: Number, image: String }],
 })
 

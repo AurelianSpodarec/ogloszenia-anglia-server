@@ -1,12 +1,13 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
 const { userService } = require('./../services');
 const jwt = require('jsonwebtoken');
 const catchExceptions = require('./../errors/CatchException');
 const StatusError = require('./../errors/StatusError');
 const { promisify } = require('util');
-const crypto = require('crypto')
+const crypto = require('crypto');
 const sendEmail = require('./../util/email');
+
 
 
 const filterObj = (obj, ...allowedFields) => {

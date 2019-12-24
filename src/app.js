@@ -44,7 +44,7 @@ app.use(hpp({
 }));
 
 // app.use(express.serve(`$()`))
-
+app.use('/uploads', express.static("uploads"))
 
 app.use('/', userController, homeController, carController);
 
