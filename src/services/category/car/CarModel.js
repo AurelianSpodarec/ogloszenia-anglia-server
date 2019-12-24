@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const CarSchema = new mongoose.Schema({
-    carId: String,
     userId: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
@@ -10,13 +9,14 @@ const CarSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    // name: String, What is this, can't remember : p
-
-    title: String,
+    title: {
+        type: String,
+        required: true
+    },
     description: String,
     price: Number,
     location: String,
-    postedBy: String,
+    postedBy: String, // User Name
 
     brand: String,
     model: String,
@@ -26,7 +26,7 @@ const CarSchema = new mongoose.Schema({
     bodyStyle: String,
     transmision: String,
     fuel: String,
-    driveStrain: String,
+    driveStrain: Array,
     seats: Number,
 
     coverPicture: String,
