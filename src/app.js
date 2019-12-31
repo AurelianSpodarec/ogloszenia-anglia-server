@@ -44,15 +44,16 @@ app.use(hpp({
 }));
 
 // app.use(express.serve(`$()`))
+
+// app.use((req, res, next) => {
+//     req.requestTime = new Date().toISOString();
+//     console.log("COOKIEE", req.cookies);
+//     next()
+// })
+
 app.use('/uploads', express.static("uploads"))
 
 app.use('/', userController, homeController, carController);
-
-app.use((req, res, next) => {
-    req.requestTime = new Date().toISOString();
-    console.log(req.cookies);
-    next()
-})
 
 app.use((error, req, res, next) => {
     console.log(error);

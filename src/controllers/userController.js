@@ -46,6 +46,30 @@ const protectedRoute = catchExceptions(async (req, res, next) => {
 })
 
 
+router.get('/api/v1/isLoggedIn',
+    catchExceptions(async (req, res, next) => {
+        if (req.cookies.jwt) {
+
+            const reqJWT = req.cookies.jwt;
+            const decoded = await promisify(jwt.verify)(
+                reqJWT,
+                process.env.JWT_SECRET
+            );
+
+            const freshUser = await userService.getUserById(decoded.id);
+
+            if (freshUser) {
+                res.status(200).json({ status: 'success', isLogged: true, user: freshUser })
+            } else {
+                res.status(404).json({ status: 'faliture', isLogged: false })
+            }
+
+        }
+
+    })
+);
+
+
 router.get('/api/v1/user/logout',
     catchExceptions(async (req, res) => {
         res.cookie('jwt', 'loggedout', {
@@ -55,7 +79,8 @@ router.get('/api/v1/user/logout',
         res.status(200).json({ status: "success" });
     })
 );
-// const isLoggedIn = async (req, res, next) => {
+
+// const isLoggedIn = catchAsync(async (req, res, next) => {
 //     if (req.cookies.jwt) {
 //         try {
 //             const decoded = await promisify(jwt.verify)(
@@ -67,15 +92,15 @@ router.get('/api/v1/user/logout',
 //             if (!freshUser) {
 //                 return next();
 //             }
-//             res.locals.user = freshUser
-//             // req.user = freshUser;
+//             // res.locals.user = freshUser
+//             req.user = freshUser;
 //             return next();
 //         } catch (err) {
 //             return next();
 //         }
 //     }
 //     next();
-// }
+// })
 
 const restrictTo = (...roles) => {
     return (req, res, next) => {
