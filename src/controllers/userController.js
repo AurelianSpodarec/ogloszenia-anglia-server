@@ -46,6 +46,8 @@ const protectedRoute = catchExceptions(async (req, res, next) => {
 })
 
 
+
+
 router.get('/api/v1/isLoggedIn',
     catchExceptions(async (req, res, next) => {
         if (req.cookies.jwt) {
@@ -57,10 +59,12 @@ router.get('/api/v1/isLoggedIn',
             );
 
             const freshUser = await userService.getUserById(decoded.id);
-
+            console.log(freshUser, reqJWT)
             if (freshUser) {
+                console.log("AAAAAAAAAAAaaa")
                 res.status(200).json({ status: 'success', isLogged: true, user: freshUser })
             } else {
+                console.log("BBBBBBBBBBBB")
                 res.status(404).json({ status: 'faliture', isLogged: false })
             }
 
@@ -123,7 +127,7 @@ const createSendToken = (user, statusCode, res) => {
         expires: new Date(
             Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
         ),
-        httpOnly: true
+        httpOnly: true // Set to true later
     };
     if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 

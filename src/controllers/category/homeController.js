@@ -3,7 +3,7 @@ const router = express.Router();
 const { homeService } = require('./../../services')
 
 router.get('/api/v1/homes', async (req, res) => {
-    const homes = homeSerice.listHomes()
+    const homes = homeService.listHomes()
     res.json(homes)
 })
 

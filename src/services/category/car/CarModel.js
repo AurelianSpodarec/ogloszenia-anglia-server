@@ -23,9 +23,9 @@ const CarSchema = new mongoose.Schema({
     year: Number,
     milleage: Number,
 
-    bodyStyle: String,
-    transmision: String,
-    fuel: String,
+    bodyStyle: Array,
+    transmision: Array,
+    fuel: Array,
     driveStrain: Array,
     seats: Number,
 

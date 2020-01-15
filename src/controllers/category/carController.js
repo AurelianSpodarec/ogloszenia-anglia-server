@@ -19,14 +19,41 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get('/api/v1/cars', async (req, res) => {
-    const cars = await carService.listCars()
-    res.json(cars)
+    const cars = await carService.listCars();
+    const length = await carService.listLength();
+
+    res.status(200).json({
+        length,
+        cars
+    })
 })
 
+// router.post('/api/v1/car',
+//     // upload.single('coverImage'),
+//     catchExceptions(async (req, res) => {
+//         const car = await carService.createCar(req.body)
+//         // const carFile = req.file.path ? req.fie.pat
+//         // const car = await carService.createCar(Object.assign(req.body, req.file.path))
+//         // car.coverImage = req.file.path
+
+//         res.status(200).json({
+//             status: 'success',
+//             message: 'Car created',
+//             data: {
+//                 car
+//             }
+//         })
+
+//         // createCar.save();
+//     })
+// );
+
 router.post('/api/v1/car',
-    upload.single('coverImage'),
+    // upload.single('coverImage'),
     catchExceptions(async (req, res) => {
+
         const car = await carService.createCar(req.body)
+
         res.status(200).json({
             status: 'success',
             message: 'Car created',
@@ -34,8 +61,6 @@ router.post('/api/v1/car',
                 car
             }
         })
-
-        // createCar.save();
     })
 );
 
