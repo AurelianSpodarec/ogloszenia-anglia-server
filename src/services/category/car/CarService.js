@@ -39,11 +39,37 @@ class CarService {
 
 
     listLength() {
-        const length = this.CarModel.count({})
+        const length = this.CarModel.estimatedDocumentCount({})
         return length;
     }
-    listCars() {
-        const cars = this.CarModel.find({})
+
+    async listCars(reqQuery) {
+        const queryObj = { ...reqQuery };
+        const excludeFields = ['page', 'sort', 'limit', 'fields'];
+        excludeFields.forEach(el => delete queryObj[el]);
+
+
+        // Filtering
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt|min|max)\b/g, match => `$${match}`)
+
+        let query = this.CarModel.find(JSON.parse(queryStr))
+
+
+        // Sorting
+        if (reqQuery.sort) {
+            query = query.sort(reqQuery.sort)
+
+        } else {
+            query = query.sort('-createdAt')
+        }
+        // else { 
+        // query = query.sort('-createdAt')
+        // }
+
+
+        // Execute
+        const cars = await query;
         return cars;
     }
 

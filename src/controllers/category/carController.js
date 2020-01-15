@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get('/api/v1/cars', async (req, res) => {
-    const cars = await carService.listCars();
+    const cars = await carService.listCars(req.query);
     const length = await carService.listLength();
 
     res.status(200).json({
