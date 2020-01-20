@@ -7,7 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
-
+const compression = require('compression');
 const { userController, homeController, carController } = require('./controllers')
 
 // Set Security HTTP headers
@@ -50,6 +50,8 @@ app.use(hpp({
 //     console.log("COOKIEE", req.cookies);
 //     next()
 // })
+
+app.use(compression())
 
 app.use('/uploads', express.static("uploads"))
 

@@ -63,10 +63,8 @@ class CarService {
         } else {
             query = query.sort('-createdAt')
         }
-        // else { 
-        // query = query.sort('-createdAt')
-        // }
 
+        // Limiting
 
         // Execute
         const cars = await query;
