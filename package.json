@@ -26,5 +26,8 @@
     "nodemailer": "^6.4.2",
     "nodemon": "^2.0.2",
     "xss-clean": "^0.1.1"
+  },
+  "engines": {
+    "node": "8.x"
   }
 }
