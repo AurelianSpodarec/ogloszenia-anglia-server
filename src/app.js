@@ -14,16 +14,9 @@ const { userController, homeController, carController } = require('./controllers
 app.use(helmet())
 
 //TODO: Delete this and add an ENV or PROD code
-var whitelist = ['http://localhost:3000', 'https://ogloszenia-anglia.herokuapp.com']
 const cors = require('cors');
 app.use(cors({
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    },
+    origin: 'https://ogloszenia-anglia.herokuapp.com/',
     credentials: true
 }));
 
