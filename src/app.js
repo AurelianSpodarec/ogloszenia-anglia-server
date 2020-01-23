@@ -16,7 +16,7 @@ app.use(helmet())
 //TODO: Delete this and add an ENV or PROD code
 const cors = require('cors');
 app.use(cors({
-    origin: 'https://ogloszenia-anglia.herokuapp.com/',
+    origin: 'https://ogloszenianglia.netlify.com',
     credentials: true
 }));
 
