@@ -4,7 +4,16 @@ class HomeService {
     }
 
     listHomes() {
-        return [];
+        return this.HomeModel.find({});
+    }
+
+    async getHome(homeId) {
+        return await this.HomeModel.findById({ homeId })
+    }
+
+    async createHome(obj) {
+        const home = await new this.HomeModel(obj);
+        return home.save();
     }
 }
 

@@ -38,7 +38,7 @@ class CarService {
     }
 
 
-    listLength() {
+    listLength(data) {
         const length = this.CarModel.estimatedDocumentCount({})
         return length;
     }

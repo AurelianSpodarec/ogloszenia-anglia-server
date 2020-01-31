@@ -16,7 +16,8 @@ app.use(helmet())
 //TODO: Delete this and add an ENV or PROD code
 const cors = require('cors');
 app.use(cors({
-    origin: 'https://ogloszenianglia.netlify.com',
+    // origin: 'https://ogloszenianglia.netlify.com',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 

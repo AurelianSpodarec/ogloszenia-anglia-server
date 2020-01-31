@@ -59,12 +59,10 @@ router.get('/api/v1/isLoggedIn',
             );
 
             const freshUser = await userService.getUserById(decoded.id);
-            console.log(freshUser, reqJWT)
+
             if (freshUser) {
-                console.log("AAAAAAAAAAAaaa")
                 res.status(200).json({ status: 'success', isLogged: true, user: freshUser })
             } else {
-                console.log("BBBBBBBBBBBB")
                 res.status(404).json({ status: 'faliture', isLogged: false })
             }
 
