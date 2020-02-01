@@ -11,9 +11,9 @@ class ElectronicsService {
         return await this.Electronics.findById({ electronicId })
     }
 
-    async createHome(obj) {
-        const home = await new this.Electronics(obj);
-        return home.save();
+    async createElectronic(obj) {
+        const electronic = await new this.Electronics(obj);
+        return electronic.save();
     }
 }
 

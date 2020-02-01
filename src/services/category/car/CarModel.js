@@ -18,7 +18,7 @@ const CarSchema = new mongoose.Schema({
     location: String,
     postedBy: String, // User Name
 
-    brand: String,
+    make: String,
     model: String,
     year: Number,
     milleage: Number,
