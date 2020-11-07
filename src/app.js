@@ -14,7 +14,7 @@ const { userController, homeController, carController } = require('./controllers
 app.use(helmet())
 
 //TODO: Delete this and add an ENV or PROD code
-const allowedOrigins = ['https://ogloszenianglia.netlify.com', 'http://localhost:3000']
+const allowedOrigins = ['https://ogloszenianglia.netlify.app', 'http://localhost:3000']
 const cors = require('cors');
 app.use(cors({
     origin: allowedOrigins.map(x => x),
